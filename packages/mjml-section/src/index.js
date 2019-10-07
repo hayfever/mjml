@@ -23,6 +23,7 @@ export default class MjSection extends BodyComponent {
     'padding-right': 'unit(px,%)',
     'text-align': 'enum(left,center,right)',
     'text-padding': 'unit(px,%){1,4}',
+    'outlook-background-override': 'string',
   }
 
   static defaultAttributes = {
@@ -49,7 +50,10 @@ export default class MjSection extends BodyComponent {
     const fullWidth = this.isFullWidth()
 
     const background = this.getAttribute('background-url')
-      ? { background: this.getBackground() }
+      ? {
+          background: this.getBackground(),
+          'background-color': this.getAttribute('background-color'),
+        }
       : {
           background: this.getAttribute('background-color'),
           'background-color': this.getAttribute('background-color'),
@@ -264,8 +268,9 @@ export default class MjSection extends BodyComponent {
   }
 
   renderFullWidth() {
-    const content = this.hasBackground()
-      ? this.renderWithBackground(`
+    const content =
+      this.hasBackground() && !this.getAttribute('outlook-background-override')
+        ? this.renderWithBackground(`
         ${this.renderBefore()}
         ${this.renderSection()}
         ${this.renderAfter()}
